@@ -1,0 +1,20 @@
+{% extends '../layout/layout.html' %}
+{% block title %}Home{%endblock%}
+
+{%block main %}
+     {% if user.is_authenticated %}
+          {{ user }}
+          {{ user.role }}
+          {%if user.role == 'professor'%}
+               <h1>Professor</h1>
+               {{ user.role}}
+          {% elif user.role == 'student' %}
+               <h1>Student</h1>
+          {% endif %}
+          {% if classrooms %}
+               {% for classroom in classrooms%}
+               <a href="{% url 'classroom_detail' classroom.pk %}">{{ classroom.className }}</a>
+               {% endfor %}
+          {%endif%}
+     {% endif %}
+{% endblock %}

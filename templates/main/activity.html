@@ -1,0 +1,20 @@
+{% extends '../layout/layout.html' %}
+
+{% block main %}
+     <h1>activity {{ activity.title }}</h1>
+     <h3>{{ activity.teacher_assigned.get_fullname }}</h3>
+     <h5>description: {{ activity.description }}<h5>
+          {% if activity.instructions %}
+          <h5>Instruction: <a href="{{ activity.instructions.url }}" download>Download</a></h5>
+      {% else %}
+          <h5>No instructions available.</h5>
+      {% endif %}
+     <h6>Time openned: {{ activity.time_limit}}</h6>
+     <h6>Time closed: {{ activity.time_limit}}</h6>
+     <form method="POST" action="{% url 'submit' classroom_pk=activity.classroom.pk pk=activity.pk %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{submit_form}}
+          <button type="submit">Submit</button>
+     </form>
+
+{% endblock%}

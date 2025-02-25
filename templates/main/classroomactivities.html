@@ -1,0 +1,10 @@
+{% extends '../layout/layout.html'%}
+
+{% block main%}
+     {% if activities %}
+          {% for activity in activities %}
+               <p><a href="{% url 'activity_detail' classroom_pk=classroom_pk pk=activity.pk %}">{{ activity.title}}</a>  {{ activity.time_limit}}</p>
+          {% endfor%}
+     {% endif%}
+
+{% endblock%}
