@@ -3,23 +3,115 @@
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     {% load bootstrap5 %}
+     {% bootstrap_css %}
+     {% bootstrap_javascript %}
+     {% block loadcss %}
      
+     {% endblock %}
      <title>{% block title%}{% endblock%}</title>
+     {%load static%}
+     <link rel="stylesheet" href="{% static 'css/index.css' %}?{% now 'U' %}">
+
 </head>
 <body>
-     {% if template != 'login' and template != 'register' %}
+     <!-- Top Navigation Bar -->
+     <nav class="navbar1">
+          <div class="nav-left">
+          <a href="{% url 'home' %}"><h2>CheckIT</h2></a>
+          {% block extra_links %}
+          {% endblock %}
+          </div>
+          <div class="nav-right">
           {% if user.is_authenticated %}
-               <span>Hi {{ user.get_full_name }}<span>
-               <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-               </form>
-          {% else %}
-               <p>You are not Logged in.</p>
-               <a href="{% url 'login' %}">Login</a>
+          <a href="#" id="profile-toggle">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="white" stroke-width="2"/>
+                    <path d="M4 22C4 18.134 7.13401 15 11 15H13C16.866 15 20 18.134 20 22" stroke="white" stroke-width="2"/>
+               </svg>
+          </a>
+          <form action="{% url 'logout' %}" method="post">
+               {% csrf_token %}
+               <button class="btn-1" type="submit">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 3H21V21H15" stroke="white" stroke-width="2"/>
+                    <path d="M10 17L15 12L10 7" stroke="white" stroke-width="2"/>
+                    <path d="M15 12H3" stroke="white" stroke-width="2"/>
+               </svg>
+               </button>
+          </form>
+
           {% endif %}
+          
+          </div>
+     </nav>
+
+     <!-- Profile Sidebar -->
+     {% if user.is_authenticated %}
+     <div class="profile-sidebar" id="profile-sidebar">
+          <div class="profile-header">
+              <h3>Student Profile</h3>
+              <span id="close-profile">&times;</span>
+          </div>
+          <div class="profile-content">
+          
+              <img src="" alt="Profile Picture" class="profile-picture" id="profile-pic">
+              <p><strong>Name:</strong> <span id="full-name">{{ user.get_full_name }}</span></p>
+              <p><strong>ID No.:</strong> <span id="id-code">STU-2025-001</span></p>
+              <p><strong>Account Type:</strong> {{ user.role }}</p>
+          
+          </div>
+     </div>
      {% endif %}
 
-     {%block main%}{% endblock %}
+     <main class="main-content">
+          {%block main%}{% endblock %}
+     </main>
+     <script>
+          document.addEventListener("DOMContentLoaded", function () {
+
+          let inactivityTime = 1800000; // 10 minutes (600,000 milliseconds)
+          let logoutTimer;
+          
+          function resetTimer() {
+          clearTimeout(logoutTimer);
+          logoutTimer = setTimeout(() => {
+               window.location.href = "/logout/"; // Redirect to logout
+          }, inactivityTime);
+          }
+     
+          // Reset timer on user activity
+          window.onload = resetTimer;
+          document.onmousemove = resetTimer;
+          document.onkeypress = resetTimer; 
+
+           // Function to get CSRF token from cookies
+           function getCookie(name) {
+               let cookieValue = null;
+               if (document.cookie && document.cookie !== "") {
+                   const cookies = document.cookie.split(";");
+                   for (let i = 0; i < cookies.length; i++) {
+                       const cookie = cookies[i].trim();
+                       if (cookie.startsWith(name + "=")) {
+                           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                           break;
+                       }
+                   }
+               }
+               return cookieValue;
+           }
+                               // Profile Sidebar Toggle
+          document.getElementById("profile-toggle").addEventListener("click", function () {
+               document.body.classList.toggle("sidebar-open");
+               document.querySelector(".container").classList.toggle("shifted");
+          });
+     
+          document.getElementById("close-profile").addEventListener("click", function () {
+               document.body.classList.remove("sidebar-open");
+               document.querySelector(".container").classList.remove("shifted");
+          });
+ 
+     });
+     </script>
 </body>
 </html>

@@ -1,0 +1,19 @@
+{% extends '../layout/layout.html'%}
+
+{% block main %}
+{% if user.is_authenticated %}
+          {%if user == submitted_activity.student or user == submitted_activity.activity.teacher_assigned%}
+               <h1>Title: {{ submitted_activity.activity.title }}</h1>
+               <h2>Clasroom: {{ submitted_activity.activity.classroom.class_name }}      Schedule: {{ submitted_activity.activity.classroom.schedule }}</h2>
+               <h2>Submitted by: {{ user.get_full_name }}</h2>
+               <h3>Grade: {{submitted_activity.grade }}</h3>
+               <h3>Status: {{submitted_activity.status }}</h3>
+               <h3>Submission feedback: {{submitted_activity.feedback }}</h3>
+               {% if submitted_activity.professor_feedback %}
+                    <h3>Professor {{ submitted_activity.teacher_assigned.get_full_name}}</h3>
+               {% endif %}
+               {% endif %}
+     {% endif %}
+     
+{% endblock%}
+

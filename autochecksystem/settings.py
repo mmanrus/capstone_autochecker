@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'autochecker',
-    'accounts',
     'rest_framework',
+    'accounts',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,20 @@ CSRF_COOKIE_SECURE = False  # Set True in production (HTTPS)
 CSRF_COOKIE_HTTPONLY = False  # Required for JS to access the cookie
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']  # Add your domain
 
+# Redis URL (Celery will use Redis as a message broker)
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# Log out users when they close their browser
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+SESSION_COOKIE_AGE = 600  
+
+# Prevent session renewal on every request
+SESSION_SAVE_EVERY_REQUEST = False
+
+# Store task results (optional, useful for debugging)
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -116,10 +131,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
-
 USE_TZ = True
 
 

@@ -1,8 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView
-
+from .forms import CustomLoginForm
 from autochecker.forms import CustomSignupForm
 
 class SignupView(CreateView):
@@ -16,7 +16,7 @@ class SignupView(CreateView):
           return context
      
 class CustomLoginView(LoginView):
-     form_class = AuthenticationForm
+     form_class = CustomLoginForm
      template_name = 'registration/login.html'
      success_url = reverse_lazy('home')
      redirect_authenticated_user = True

@@ -1,20 +1,71 @@
 {% extends '../layout/layout.html' %}
 
 {% block main %}
-     <h1>activity {{ activity.title }}</h1>
-     <h3>{{ activity.teacher_assigned.get_fullname }}</h3>
-     <h5>description: {{ activity.description }}<h5>
-          {% if activity.instructions %}
-          <h5>Instruction: <a href="{{ activity.instructions.url }}" download>Download</a></h5>
-      {% else %}
-          <h5>No instructions available.</h5>
-      {% endif %}
-     <h6>Time openned: {{ activity.time_limit}}</h6>
-     <h6>Time closed: {{ activity.time_limit}}</h6>
-     <form method="POST" action="{% url 'submit' classroom_pk=activity.classroom.pk pk=activity.pk %}" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{submit_form}}
-          <button type="submit">Submit</button>
-     </form>
+     {% if user.is_authenticated %}
+          {% if messages %}
+               {% for message in messages%}
+                    <div class="alert alert-primary" role="alert">
+                         {{ message }}
+                    </div>
+               {% endfor %}
+          {% endif %}
+          <h1>activity {{ activity.title }}</h1>
+          <h3>{{ activity.teacher_assigned.get_fullname }}</h3>
+          <h5>description: {{ activity.description }}<h5>
+               {% if activity.instructions %}
+               <h5>Instruction: <a href="{{ activity.instructions.url }}" download>Download</a></h5>
+          {% else %}
+               <h5>No instructions available.</h5>
+          {% endif %}
+          <h6>Time openned: {{ activity.time_open}}</h6>
+          <h6>Time closed: {{ activity.time_limit }}</h6>
+          {% if user.role == "student" %}
+               {% if submitted_activities %}
+                    <p>You have already submitted this activity.</p>
+                    <form method="post" action="{% url 'unsubmit' submitted_activities.first.pk %}">
+                         {% csrf_token %}
+                         {% for submitted in submitted_activities %}
+                         <ul><li>{{ submitted.activity.title }} {{ submitted.status }} <a href="{% url 'submission_detail' classroom_pk=activity.classroom.pk activity_pk=activity.pk pk=submitted.pk%}">click to see results</a>
+                              <button type="submit">Unsubmit</button>
+                         </li></ul>
+                         {% endfor %}
+                    </form>
+               {% else %}
+                    <form method="post" action='{% url "submit" classroom_pk=activity.classroom.pk pk=activity.pk %}' enctype="multipart/form-data">
+                         {% csrf_token %}
+                         {{ submit_form.as_p }}
+                   
+                    
+                    <p>{{  activity.time_limit|date:"Y-m-d H:i:s" }}</p>
+                    
+                    <button type="submit" >Submit</button>
+                    </form>
+               {% endif %}
+          {% elif user.role == 'professor' %}
+               {% if student_submitted %}
+               <ul>
+                    {% for item  in student_submitted %}
+                         <li>
+                              {{ item.student.last_name|title }}, {{ item.student.first_name|title }} 
+                              {% if item.is_submitted %}
+                                   {% with submission=item.submission %}
+                                        {% if submission %}
+                                             <a href="{% url 'submission_detail' classroom_pk=activity.classroom.pk activity_pk=activity.pk pk=submission.pk %}">Results</a>
+                                             {{ submission.grade|floatformat:0 }}/100 - Status: {{ submission.status }}
+                                        {% else %}
+                                         not found
+                                        {% endif %}
+                                   {% endwith %}
+                              {% else %}
+                                   No submission
+                              {% endif %}
+                         </li>
+                    {% endfor %}
+               </ul>
+               {% else %}
+                    <p>No students found.</p>
+               {% endif %}
+          {% endif %}
+     {% endif%}
 
 {% endblock%}
