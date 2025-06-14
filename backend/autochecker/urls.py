@@ -1,15 +1,15 @@
 from django.urls import path
 
-from backend.autochecker.views.activity_detail import ActivityDetail
-from backend.autochecker.views.auth_views import auto_logout
-from backend.autochecker.views.classroom_activities import ClassroomActivities
-from backend.autochecker.views.classroom_list import ClassroomListView
-from backend.autochecker.views.create_activity import CreateActivityView
-from backend.autochecker.views.create_classroom import ClassroomCreateView
-from backend.autochecker.views.join_classroom import JoinClassroomView
-from backend.autochecker.views.submit_view import SubmitView
-from backend.autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
-from backend.autochecker.views.unsubmit import UnsubmitView
+from autochecker.views.activity_detail import ActivityDetail
+from autochecker.views.auth_views import auto_logout
+from autochecker.views.classroom_activities import ClassroomActivities
+from autochecker.views.classroom_list import ClassroomListView
+from autochecker.views.create_activity import CreateActivityView
+from autochecker.views.create_classroom import ClassroomCreateView
+from autochecker.views.join_classroom import JoinClassroomView
+from autochecker.views.submit_view import SubmitView
+from autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
+from autochecker.views.unsubmit import UnsubmitView
 
 urlpatterns = [
     path("logout/", auto_logout, name="auto_logout"),

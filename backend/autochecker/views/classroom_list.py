@@ -1,4 +1,4 @@
-from ..models import Classroom
+from autochecker.models import Classroom
 from django.db.models import Q
 from ..forms import ClassroomCodeForm
 

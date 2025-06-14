@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
-from models import Submission
+from autochecker.models import Submission
 
 class SubmittedActivityScoreDetailView(LoginRequiredMixin, DetailView):
     template_name = 'main/submitted_acitivity_detail.html'

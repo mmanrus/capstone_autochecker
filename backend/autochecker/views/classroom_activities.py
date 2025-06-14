@@ -1,5 +1,5 @@
 from django.views.generic import ListView
-from models import Activity, Classroom
+from autochecker.models import Activity, Classroom
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 

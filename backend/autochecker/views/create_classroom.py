@@ -1,5 +1,5 @@
-from ..forms import CreateClassroomForm
-from ..models import Classroom
+from autochecker.forms import CreateClassroomForm
+from autochecker.models import Classroom
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin

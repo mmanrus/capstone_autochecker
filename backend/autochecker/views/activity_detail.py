@@ -1,8 +1,8 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
-from models import Activity, Submission
-from forms import SubmitForm
+from autochecker.models import Activity, Submission
+from autochecker.forms import SubmitForm
 from django.db.models import OuterRef, Subquery
 
 class ActivityDetail( LoginRequiredMixin,DetailView):

@@ -2,8 +2,8 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import CreateView
-from models import Submission, Classroom, Activity
-from forms import SubmitForm
+from autochecker.models import Submission, Classroom, Activity
+from autochecker.forms import SubmitForm
 import pytz
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render

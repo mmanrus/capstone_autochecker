@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
-from models import Activity, Classroom
-from forms import ActivityCreationForm
+from autochecker.models import Activity, Classroom
+from autochecker.forms import ActivityCreationForm
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.urls import reverse

@@ -1,8 +1,8 @@
 from venv import logger
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from forms import ClassroomCodeForm
-from models import Classroom
+from autochecker.forms import ClassroomCodeForm
+from autochecker.models import Classroom
 from django.contrib import messages
 from django.shortcuts import get_object_or_404,redirect
 
