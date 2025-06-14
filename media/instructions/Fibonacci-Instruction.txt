@@ -1,4 +1,0 @@
-Write a python code that 
-give a fibonacci list
-
-use check50 mmanrus/checker/main/year/1st/problem/fibonacci_sequence
