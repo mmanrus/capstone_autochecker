@@ -1,0 +1,35 @@
+{% extends '../layout/layout.html' %}
+
+{% block main %}
+     {% if user.is_authenticated %}
+          {% if user.role == 'professor' %}
+          <form method="post" enctype="multipart/form-data" class="container">
+               {% csrf_token  %}
+
+                    {% for field in form %}
+                         <div>
+                         {{ field.label_tag }} 
+                         {{ field }}
+                         {% if field.errors %}
+                              <small style="color: red;">{{ field.errors.0 }}</small>
+                         {% endif %}
+                         </div>
+                    {% endfor %}
+                    {% if form.errors %}
+                         <div style="color: red;">
+                              <p>There were errors in your form:</p>
+                              <ul>
+                                   {% for field, errors in form.errors.items %}
+                                        <li>{{ field }}: {{ errors.0 }}</li>
+                                   {% endfor %}
+                              </ul>
+                         </div>
+                    {% endif %}
+          
+               <button type="submit">Create Activity</button>
+          </form>
+          {%else%}
+          You are not allowed here. :(
+          {%endif%}
+     {% endif%}
+{% endblock%}

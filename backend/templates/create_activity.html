@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Create Activity</title>
+</head>
+<body>
+    <h1>Create Activity</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+        </div>
+
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+
+        <div>
+            <label for="file">Upload Instructions:</label>
+            <input type="file" id="file" name="file">
+        </div>
+
+        <button type="submit">Create Activity</button>
+    </form>
+</body>
+</html>

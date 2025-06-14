@@ -1,0 +1,280 @@
+
+body, html {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background: #f8f9fa;
+}
+
+/* Navbar */
+.navbar {
+    background: #1E5631;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Navbar Links */
+.navbar .nav-right a {
+    color: white;
+    text-decoration: none;
+    margin-right: 35px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-right a:hover {
+    color: #d4edda;
+    text-decoration: underline;
+}
+
+/* Profile Sidebar */
+.profile-sidebar {
+    position: fixed;
+    left: -250px; /* Initially hidden */
+    top: 0;
+    height: 100vh;
+    width: 250px;
+    background: #0B3D91;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-open .profile-sidebar {
+    left: 0; /* Show when active */
+}
+
+.sidebar-open .container {
+    margin-left: 250px; /* Push content instead of blocking */
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.profile-header h3 {
+    margin: 0;
+}
+
+#close-profile {
+    cursor: pointer;
+    font-size: 20px;
+    color: red; /* More noticeable */
+}
+
+/* Profile Content */
+.profile-content {
+    text-align: justified;
+    margin-left: 30px; margin-top: 20px;
+}
+
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: white;
+    object-fit: cover;
+    display: block;
+    margin-left: 40px; margin-top: 40px;
+    border: 3px solid white;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    margin-top: 60px;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: white;
+    padding: 20px;
+}
+
+/* Classroom Header */
+.classroom-header {
+    background: #1C3D5A;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 1.8em;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Classroom Container */
+.classroom-container {
+    flex-grow: 1;
+    background: #F5F5F5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+/* Classroom Items */
+.classroom-item {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.classroom-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.classroom-item a {
+    color: #1E5631;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.classroom-item a:hover {
+    text-decoration: underline;
+}
+
+/* Empty Classroom Message */
+.text-center {
+    text-align: center;
+    font-weight: bold;
+    color: #555;
+    padding: 10px;
+}
+
+/* Floating Add Course Button */
+#add-course-btn {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease;
+}
+
+#add-course-btn:hover {
+    background: #0056b3;
+}
+
+/* Add Course Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1050;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Modal Close Button */
+.close-modal {
+    color: red;
+    font-size: 40px;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    margin-left: 95%;
+}
+
+/* Modal Button */
+.modal-content button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.modal-content button:hover {
+    background: #0056b3;
+}
+
+/* Input Field */
+.modal-content input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Button Styling */
+.btn {
+    background: #1E5631;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #146534;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+}
