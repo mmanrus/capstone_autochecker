@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'autochecker',
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt',
     'accounts',
     'bootstrap5',
 ]
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware', 
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
 ]
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_COOKIE_SECURE = False  # Set True in production (HTTPS)
