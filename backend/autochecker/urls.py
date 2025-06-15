@@ -5,7 +5,7 @@ from autochecker.views.auth_views import auto_logout
 from autochecker.views.classroom_activities import ClassroomActivities
 from autochecker.views.classroom_list import ClassroomListView
 from autochecker.views.create_activity import CreateActivityView
-from autochecker.views.create_classroom import ClassroomCreateView
+from autochecker.views.create_classroom import ClassroomCreateView, ClassroomDelete, ClassroomCreate
 from autochecker.views.join_classroom import JoinClassroomView
 from autochecker.views.submit_view import SubmitView
 from autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
@@ -20,7 +20,8 @@ urlpatterns = [
     path('classroom/<int:classroom_pk>/activity/<int:activity_pk>/submitted/<int:pk>',SubmittedActivityScoreDetailView.as_view(), name='submission_detail'),
     path('submission/<int:pk>/unsubmit/', UnsubmitView.as_view(), name='unsubmit'),
     #!SECTION ClassRoom
-    path('classroom/create/', ClassroomCreateView.as_view(),name="create_classroom"),
+    path('classroom/create/', ClassroomCreate.as_view(),name="create_classroom"),
+    path('classroom/delete/', ClassroomDelete.as_view(), name='delete_classroom'),
     path('classroom/join/', JoinClassroomView.as_view(), name="join_classroom"),
     path('', ClassroomListView.as_view(), name='home'),
     path('classroom/<int:pk>/', ClassroomActivities.as_view(), name='classroom_detail')

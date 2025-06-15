@@ -4,6 +4,12 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
+
+
+# Rest
+from rest_framework import generics
+from autochecker.serializers.classroom_serializer import ClassroomSerializer
+from rest_framework.permissions import IsAuthenticated
 class ClassroomCreateView(LoginRequiredMixin, CreateView):
     template_name = 'main/create_classroom.html'
     form_class = CreateClassroomForm
@@ -28,3 +34,25 @@ class ClassroomCreateView(LoginRequiredMixin, CreateView):
         
     def get_success_url(self):
         return reverse('classroom_detail', kwargs={'pk': self.object.pk})
+    
+class ClassroomCreate(generics.CreateAPIView):
+    serializer_class = ClassroomSerializer
+    permission_classes = [IsAuthenticated]
+
+
+    def perform_create(self, serializer):
+        if serializer.valid:
+            user = self.request.user
+            if user.role != 'professor':
+                raise PermissionError("Only professors can create classrooms.")
+        serializer.save(teacher_assigned=user)
+    
+    def get_queryset(self):
+        return Classroom.objects.filter(teacher_assigned=self.request.user)
+    
+class ClassroomDelete(generics.DestroyAPIView):
+    serializer_class = ClassroomSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Classroom.objects.filter(teacher_assigned=self.request.user)
