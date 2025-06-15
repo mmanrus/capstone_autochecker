@@ -43,20 +43,26 @@ class Classroom(models.Model):
      def save(self, *args, **kwargs):
           # ✅ Generate a class code if it's empty
           if not self.class_code:
-               self.generate_class_code()
+               self.class_code = self.generate_class_code()
           super().save(*args, **kwargs)
 
-     def generate_class_code(self):
           '''
+          def generate_class_code(self):
+          
           # Generates Class Code After Created
-          '''
+          
           while True:
                random_classcode = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
                if not Classroom.objects.filter(class_code=random_classcode).exists():
                     self.class_code = random_classcode
                     self.save()
-                    break
-          
+                    break'''
+          def generate_class_code(self):
+               while True:
+                    random_classcode = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+                    if not Classroom.objects.filter(class_code=random_classcode).exists():
+                         return random_classcode
+                         
 # Activity
 def default_time_closed():
      return now() + timedelta(hours=1)

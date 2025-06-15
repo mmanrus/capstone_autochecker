@@ -4,11 +4,11 @@ from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView
 from .forms import CustomLoginForm
 from autochecker.forms import CustomSignupForm
-from autochecker.serializers import UserSerializer
+from autochecker.serializers.user_serializer import UserSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from autochecker.models import CustomUser
-from autochecker.serializers import UserSerializer
+
 #!SECTION React and Django
 class CreateUserView(generics.CreateAPIView):
      queryset = CustomUser.objects.all()
