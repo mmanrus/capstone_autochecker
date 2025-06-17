@@ -5,7 +5,7 @@ import api from '../api'
 import {REFRESH_TOKEN, ACCESS_TOKEN} from '../constants.js'
 import {useState, useEffect} from 'react'
 
-function ProtectedRoute(children) {
+function ProtectedRoute({children}) {
      const [isAuthorized, setIsAuthorized] = useState(null)
 
      useEffect(()=> {
@@ -40,15 +40,18 @@ function ProtectedRoute(children) {
           const now = Date.now() / 1000
           // check token if not expired
           if (tokenExperation < now) {
+               // if expired refresh token
                await refreshToken()
           } else {
                setIsAuthorized(true)
           }
      }
 
-     if (isAuthorized) == null {
+     if (isAuthorized == null) {
           return <div>Loading....</div>
      }
+
+     // If unauthorized back to login
      return isAuthorized ? children : <Navigate to='/login'/>
 }
 
