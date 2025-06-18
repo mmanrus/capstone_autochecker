@@ -20,7 +20,7 @@ function Form({route, method}) {
                const res = await api.post(route, {username, password})
                if (method === 'login') {
                     localStorage.setItem(ACCESS_TOKEN, res.data.access)
-                    localStorage.setItem(ACCESS_TOKEN, res.data.refresh)
+                    localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
                     navigate('/')
                } else {
                     navigate('/login')
@@ -37,13 +37,13 @@ function Form({route, method}) {
                <form onSubmit={handleSubmit} className="form-container">
                     <h1>{name}</h1>
                     <input 
-                         class='form-input' 
+                         className='form-input' 
                          type='text' value={username} 
                          onChange={(e) => setUsername(e.target.value)} 
                          placeholder='Username'
                          />
                     <input 
-                         class='form-input' 
+                         className='form-input' 
                          type='password' 
                          value={password}
                          onChange={(e) => setPassword(e.target.value)}

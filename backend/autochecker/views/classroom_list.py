@@ -1,4 +1,4 @@
-from autochecker.models import Classroom
+from autochecker.models.classroom_model import Classroom
 from django.db.models import Q
 from ..forms import ClassroomCodeForm
 
@@ -23,3 +23,24 @@ class ClassroomListView(LoginRequiredMixin, ListView):
         context['join_classroom_form'] = ClassroomCodeForm()
         
         return context
+    
+from rest_framework import generics
+
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+#from autochecker.models.classroom_model import Classroom
+from autochecker.serializers.classroom_serializer import ClassroomSerializer
+
+        
+class ClassroomListViewAPI(generics.ListAPIView):
+    serializer_class = ClassroomSerializer
+    permission_classes = [IsAuthenticated] #AllowAny for testing
+    
+    def get_queryset(self):
+        user = self.request.user
+        
+        return Classroom.objects.filter(
+            Q(students_assigned=user) | Q(teacher_assigned=user)
+        ).distinct()
+        # For testing if it works
+        # return Classroom.objects.all()

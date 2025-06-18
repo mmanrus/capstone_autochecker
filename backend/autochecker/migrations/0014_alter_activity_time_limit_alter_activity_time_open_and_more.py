@@ -4,6 +4,7 @@ import autochecker.models
 import datetime
 from django.conf import settings
 from django.db import migrations, models
+import autochecker.models.utils
 
 
 class Migration(migrations.Migration):
@@ -16,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='activity',
             name='time_limit',
-            field=models.DateTimeField(default=autochecker.models.default_time_closed, null=True),
+            field=models.DateTimeField(default=autochecker.models.utils.default_time_closed, null=True),
         ),
         migrations.AlterField(
             model_name='activity',
@@ -26,6 +27,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='classroom',
             name='students_assigned',
-            field=models.ManyToManyField(blank=True, limit_choices_to=autochecker.models.student_filter, related_name='student_classes', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True, limit_choices_to=autochecker.models.utils.student_filter, related_name='student_classes', to=settings.AUTH_USER_MODEL),
         ),
     ]

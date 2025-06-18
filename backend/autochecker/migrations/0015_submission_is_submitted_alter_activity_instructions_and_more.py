@@ -3,6 +3,7 @@
 import autochecker.models
 import django.utils.timezone
 from django.db import migrations, models
+import autochecker.models.utils  
 
 
 class Migration(migrations.Migration):
@@ -31,6 +32,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='submission',
             name='submitted_file',
-            field=models.FileField(upload_to=autochecker.models.create_dir),
+            field=models.FileField(upload_to=autochecker.models.utils.create_dir),
         ),
     ]

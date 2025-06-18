@@ -1,5 +1,6 @@
 from django.views.generic import ListView
-from autochecker.models import Activity, Classroom
+from autochecker.models.activity_model import Activity
+from autochecker.models.classroom_model import Classroom
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
@@ -14,6 +15,19 @@ class ClassroomActivities(LoginRequiredMixin, ListView):
         context['classroom_pk'] = classroom_pk 
         context['classroom'] = get_object_or_404(Classroom, pk=classroom_pk)
         return context
+    
+    def get_queryset(self):
+        classroom_id = self.kwargs.get('pk')
+        classroom = get_object_or_404(Classroom, id=classroom_id)
+        return Activity.objects.filter(classroom=classroom)
+
+from rest_framework import generics
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from autochecker.serializers.classroom_serializer import ClassroomSerializer
+class ClassroomActivitiesAPI(generics.ListAPIView):
+    serializer_class = ClassroomSerializer
+    permission_classes = []
+    
     def get_queryset(self):
         classroom_id = self.kwargs.get('pk')
         classroom = get_object_or_404(Classroom, id=classroom_id)

@@ -1,11 +1,12 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
-from autochecker.models import Activity, Submission
+from autochecker.models.activity_model import Activity
+from autochecker.models.submission_model import Submission
 from autochecker.forms import SubmitForm
 from django.db.models import OuterRef, Subquery
 
-class ActivityDetail( LoginRequiredMixin,DetailView):
+class ActivityDetail(LoginRequiredMixin,DetailView):
     model = Activity
     template_name = 'main/activity.html'
     context_object_name = 'activity'
@@ -46,3 +47,14 @@ class ActivityDetail( LoginRequiredMixin,DetailView):
         context['submit_form'] = SubmitForm()
 
         return context
+
+from rest_framework import generics
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+from autochecker.serializers.activity_serializer import ActivitySerializer
+class ActivityDetailAPI(generics.RetrieveAPIView):
+    serializer_class = ActivitySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        return Activity.objects.all()
+    

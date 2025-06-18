@@ -17,7 +17,7 @@ function RegisterAndLogout(){
      return <Register />
 }
 function App() {
-     console.log('App')
+
      return (
      <>
 

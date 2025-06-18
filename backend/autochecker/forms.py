@@ -1,4 +1,7 @@
-from .models import CustomUser, Activity, Submission, Classroom
+from autochecker.models.custom_user_model import CustomUser
+from autochecker.models.activity_model import Activity
+from autochecker.models.submission_model import Submission
+from autochecker.models.classroom_model import Classroom
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ModelForm
 from django import forms

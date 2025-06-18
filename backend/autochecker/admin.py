@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Classroom, Activity, Submission, CustomUser
+from autochecker.models.activity_model import Activity
+from autochecker.models.submission_model import Submission
+from autochecker.models.classroom_model import Classroom
+from autochecker.models.custom_user_model import CustomUser
 # Register your models here.
 
 admin.site.register(Activity)

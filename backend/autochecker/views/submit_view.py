@@ -2,7 +2,9 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import CreateView
-from autochecker.models import Submission, Classroom, Activity
+from autochecker.models.submission_model import Submission
+from autochecker.models.activity_model import Activity
+from autochecker.models.classroom_model import Classroom
 from autochecker.forms import SubmitForm
 import pytz
 from django.contrib import messages

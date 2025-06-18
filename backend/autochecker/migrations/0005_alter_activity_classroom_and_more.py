@@ -4,7 +4,7 @@ import autochecker.models
 import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
-
+from autochecker.models.utils import professor_filter, student_filter
 
 class Migration(migrations.Migration):
 
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='activity',
             name='teacher_assigned',
-            field=models.ForeignKey(blank=True, default=1, limit_choices_to=autochecker.models.professor_filter, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, default=1, limit_choices_to=autochecker.models.utils.professor_filter, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AlterField(
@@ -32,11 +32,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='classroom',
             name='students_assigned',
-            field=models.ManyToManyField(blank=True, limit_choices_to=autochecker.models.student_filter, related_name='student_classes', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True, limit_choices_to=autochecker.models.utils.student_filter, related_name='student_classes', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='classroom',
             name='teacher_assigned',
-            field=models.ForeignKey(limit_choices_to=autochecker.models.professor_filter, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(limit_choices_to=autochecker.models.utils.professor_filter, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
     ]

@@ -1,4 +1,4 @@
-from autochecker.models import CustomUser
+from autochecker.models.custom_user_model import CustomUser
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):

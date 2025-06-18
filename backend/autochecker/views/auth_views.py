@@ -4,15 +4,13 @@ import logging
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 import csv
 from django.utils.timezone import now
-from django.contrib.auth.views import LoginView
-from django.contrib.auth import get_user_model, logout
+from django.contrib.auth import logout
 import socket
 from django.dispatch import receiver
-from django.db.models import OuterRef, Subquery, Exists, Value, BooleanField
-from datetime import datetime
+
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +39,7 @@ def log_user_login(sender, request, user, **kwargs):
         
         # Write login data
         writer.writerow([full_name, device_name, timestamp, ""])
+
 @csrf_exempt  # Allow CSRF bypass only for logout (since CSRF is sent in JS)
 @require_POST  # Ensure logout is only done via POST request
 def auto_logout(request):

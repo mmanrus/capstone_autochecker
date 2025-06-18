@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
-from autochecker.models import Activity, Classroom
+from autochecker.models.activity_model import Activity
+from autochecker.models.classroom_model import Classroom
 from autochecker.forms import ActivityCreationForm
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -29,3 +30,4 @@ class CreateActivityView(LoginRequiredMixin, CreateView):
         
     def get_success_url(self):
         return reverse('activity_detail', kwargs={'classroom_pk': self.classroom.pk, 'pk': self.activity.pk})
+
