@@ -2,7 +2,7 @@ from django.urls import path
 
 from autochecker.views.activity_detail import ActivityDetail
 from autochecker.views.auth_views import auto_logout
-from autochecker.views.classroom_activities import ClassroomActivities
+from autochecker.views.classroom_activities import ClassroomActivitiesAPI
 from autochecker.views.classroom_list import ClassroomListView, ClassroomListViewAPI
 from autochecker.views.create_activity import CreateActivityView
 from autochecker.views.create_classroom import ClassroomCreateView, ClassroomDelete, ClassroomCreate
@@ -24,6 +24,6 @@ urlpatterns = [
     path('classroom/delete/', ClassroomDelete.as_view(), name='delete_classroom'),
     path('classroom/join/', JoinClassroomView.as_view(), name="join_classroom"),
     path('', ClassroomListViewAPI.as_view(), name='home'),
-    path('classroom/<int:pk>/', ClassroomActivities.as_view(), name='classroom_detail')
+    path('classroom/<int:pk>/', ClassroomActivitiesAPI.as_view(), name='classroom_detail')
     
 ]

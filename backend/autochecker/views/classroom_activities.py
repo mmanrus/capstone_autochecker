@@ -1,36 +1,30 @@
-from django.views.generic import ListView
 from autochecker.models.activity_model import Activity
 from autochecker.models.classroom_model import Classroom
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
-
-class ClassroomActivities(LoginRequiredMixin, ListView):
-    template_name = 'main/classroom_activities.html'
-    model = Activity
-    context_object_name = 'activities'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        classroom_pk = self.kwargs.get('pk')
-        context['classroom_pk'] = classroom_pk 
-        context['classroom'] = get_object_or_404(Classroom, pk=classroom_pk)
-        return context
-    
-    def get_queryset(self):
-        classroom_id = self.kwargs.get('pk')
-        classroom = get_object_or_404(Classroom, id=classroom_id)
-        return Activity.objects.filter(classroom=classroom)
-
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from autochecker.serializers.classroom_serializer import ClassroomSerializer
+from autochecker.serializers.activity_serializer import ActivitySerializer
+
+#!SECTION Get Activities in the Classroom
 class ClassroomActivitiesAPI(generics.ListAPIView):
-    serializer_class = ClassroomSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     
-    def get_queryset(self):
+    def list(self, request, *args, **kwargs):
+        # Get the classroom
         classroom_id = self.kwargs.get('pk')
         classroom = get_object_or_404(Classroom, id=classroom_id)
-        return Activity.objects.filter(classroom=classroom)
+        
+        # Serialize Classroom and Activities
+        classroom_data = ClassroomSerializer(classroom).data
+        # get Activities assigned to the classroom
+        activities = Activity.objects.filter(classroom=classroom)
+        # serializer Activities
+        activity_data = ActivitySerializer(activities, many=True).data
+        return Response({
+            'classroom': classroom_data,
+            'activity': activity_data
+        })
 
     
