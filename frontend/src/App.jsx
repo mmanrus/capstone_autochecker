@@ -4,6 +4,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
+import ClassroomActivities from './pages/ClassroomActivities'
 import ProtectedRoute from "./components/ProtectedRoute"
 
 
@@ -23,13 +24,26 @@ function App() {
 
           <BrowserRouter>
                <Routes>
-                    <Route 
-                    path='/'
+                    <Route path='/'
                          element= {
                               <ProtectedRoute>
                                    <Home />
                               </ProtectedRoute>
                     } />
+                    <Route path = '/classroom/:id'
+                         element={
+                              <ProtectedRoute>
+                                   <ClassroomActivities />
+                              </ProtectedRoute>
+                         }
+                    />     
+                    <Route path = '/classroom/:id/:id'
+                         element={
+                              <ProtectedRoute>
+                                   <ActivityDetail />
+                              </ProtectedRoute>
+                         }
+                    />                  
                     <Route path='/login' element= { <Login />}
                     />
                     <Route path='/logout' element= { <Logout />}
