@@ -35,24 +35,22 @@ class ClassroomCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('classroom_detail', kwargs={'pk': self.object.pk})
     
-class ClassroomCreate(generics.CreateAPIView):
+class ClassroomCreateViewAPI(generics.CreateAPIView):
     serializer_class = ClassroomSerializer
     permission_classes = [IsAuthenticated]
 
 
     def perform_create(self, serializer):
-        if serializer.valid:
-            user = self.request.user
-            if user.role != 'professor':
-                raise PermissionError("Only professors can create classrooms.")
+        user = self.request.user
+        if user.role != 'professor':
+            raise PermissionError("Only professors can create classrooms.")
         serializer.save(teacher_assigned=user)
+
     
-    def get_queryset(self):
-        return Classroom.objects.filter(teacher_assigned=self.request.user)
-    
-class ClassroomDelete(generics.DestroyAPIView):
+class ClassroomDeleteViewAPI(generics.DestroyAPIView):
     serializer_class = ClassroomSerializer
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         return Classroom.objects.filter(teacher_assigned=self.request.user)
+  

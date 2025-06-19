@@ -13,6 +13,6 @@ class ActivitySerializer(serializers.ModelSerializer):
      def create(self, validated_data):
           user = self.context['request'].user
           if user.role != 'student':
-               serializers.ValidationError(self.request, 'Activity Creation Failed you are not the FATHER XD')
+               serializers.ValidationError('Activity Creation Failed you are not the FATHER XD')
           return Activity.objects.create(**validated_data)
      

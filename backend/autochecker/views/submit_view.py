@@ -9,6 +9,8 @@ from autochecker.forms import SubmitForm
 import pytz
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render
+
+
 class SubmitView(LoginRequiredMixin, CreateView):
     model = Submission
     form_class = SubmitForm
@@ -53,3 +55,4 @@ class SubmitView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('activity_detail', kwargs={'classroom_pk': self.object.activity.classroom.pk,'pk': self.object.activity.pk})
     
+#!SECTION Assignment!

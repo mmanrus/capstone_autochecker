@@ -31,5 +31,11 @@ class CreateActivityView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('activity_detail', kwargs={'classroom_pk': self.classroom.pk, 'pk': self.activity.pk})
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from autochecker.serializers.activity_serializer import ActivitySerializer
 class CreateActivityViewAPI(generics.CreateAPIView):
-    ...
+    serializer_class = ActivitySerializer
+    permission_classes = [IsAuthenticated]
+    
+    def perform_create(self, serializer):
+        serializer.save(teacher_assigned=self.request.user)
