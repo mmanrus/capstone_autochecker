@@ -12,3 +12,10 @@ class ClassroomSerializer(serializers.ModelSerializer):
                "teacher_assigned": {'read_only': True}, 
                "students_assigned": {'read_only': True}
                }
+     
+     def create(self, validated_data):
+          user = self.context['request'].user
+          if user.role == 'student':
+               serializers.ValidationError('Activity Creation Failed you are not the FATHER XD')
+          return Classroom.objects.create(**validated_data)
+     

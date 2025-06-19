@@ -30,4 +30,6 @@ class CreateActivityView(LoginRequiredMixin, CreateView):
         
     def get_success_url(self):
         return reverse('activity_detail', kwargs={'classroom_pk': self.classroom.pk, 'pk': self.activity.pk})
-
+from rest_framework import generics
+class CreateActivityViewAPI(generics.CreateAPIView):
+    ...

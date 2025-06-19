@@ -1,10 +1,15 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
 from autochecker.models.activity_model import Activity
 from autochecker.models.submission_model import Submission
 from autochecker.forms import SubmitForm
 from django.db.models import OuterRef, Subquery
+
+from autochecker.models.classroom_model import Classroom
+from autochecker.serializers.submission_serializer import SubmissionSerializer
+from autochecker.serializers.user_serializer import UserSerializer
 
 class ActivityDetail(LoginRequiredMixin,DetailView):
     model = Activity
@@ -50,11 +55,47 @@ class ActivityDetail(LoginRequiredMixin,DetailView):
 
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 from autochecker.serializers.activity_serializer import ActivitySerializer
+import json
 class ActivityDetailAPI(generics.RetrieveAPIView):
     serializer_class = ActivitySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Activity.objects.all()
     
-    def get_queryset(self):
-        return Activity.objects.all()
+    def retrieve(self, request, *args, **kwargs):
+        user = self.request.user
+        activity_id = self.kwargs.get('pk')
+        classroom_id = self.kwargs.get('classroom_pk')
+        
+        activity = get_object_or_404(Activity, id=activity_id, classroom=classroom_id)
+        classroom = activity.classroom
+        
+        # See who submits
+        submission_subquery = Submission.objects.filter(
+            activity=activity, student=OuterRef('pk')
+        ).values('id')[:1]
+
+        # Convert to a list of dictionaries to include the full submission object
+        students = classroom.students_assigned.all()
+        student_data = []
+        for student in students:
+            submission = Submission.objects.filter(activity=activity, student=student).first()
+            student_data.append({
+                'student': UserSerializer(student).data,
+                'is_submitted': submission is not None,
+                'submission': SubmissionSerializer(submission).data if submission else None  # Include full submission object
+            })
+        
+        own_submission = Submission.objects.filter(activity=activity, student=user).first()
+        serialized_submission = SubmissionSerializer(own_submission).data if own_submission else None
+
+        # Serialize
+        serialized_activity = self.get_serializer(activity).data
+        serialized_submission = SubmissionSerializer(submission).data
+        return Response({
+            'activity': serialized_activity,
+            'submission': serialized_submission,
+            'student': student_data
+        })
     

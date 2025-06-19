@@ -28,7 +28,7 @@ function ClassroomActivities(){
                {activities.activity ?
                     (<ul>
                     {activities.activity.map((activity)=>(
-                         <li key={activity.id}><Link to={`/classrom/${activities.classroom.id}/${activity.id}`}><strong>{activity.title}</strong></Link> {formattedDate(activity.time_limit)} {activity.isClosed ? 'Closed': 'Open'}</li>
+                         <li key={activity.id}><Link to={`/classroom/${activities.classroom.id}/${activity.id}`}><strong>{activity.title}</strong></Link> {formattedDate(activity.time_limit)} {activity.isClosed ? 'Closed': 'Open'}</li>
                     ))}
                     </ul>): ''
                }

@@ -1,24 +1,24 @@
 from django.urls import path
 
-from autochecker.views.activity_detail import ActivityDetail
+from autochecker.views.activity_detail import ActivityDetailAPI
 from autochecker.views.auth_views import auto_logout
 from autochecker.views.classroom_activities import ClassroomActivitiesAPI
-from autochecker.views.classroom_list import ClassroomListView, ClassroomListViewAPI
+from autochecker.views.classroom_list import ClassroomListViewAPI
 from autochecker.views.create_activity import CreateActivityView
-from autochecker.views.create_classroom import ClassroomCreateView, ClassroomDelete, ClassroomCreate
+from autochecker.views.create_classroom import ClassroomDelete, ClassroomCreate
 from autochecker.views.join_classroom import JoinClassroomView
 from autochecker.views.submit_view import SubmitView
 from autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
-from autochecker.views.unsubmit import UnsubmitView
+from autochecker.views.unsubmit import UnsubmitViewAPI
 
 urlpatterns = [
     path("logout/", auto_logout, name="auto_logout"),
-   #!SECTION Activity
+    #!SECTION Activity
     path('classroom/<int:classroom_pk>/makeactivity/', CreateActivityView.as_view(), name="makeactivity"),
-    path('classroom/<int:classroom_pk>/activity/<int:pk>', ActivityDetail.as_view(), name='activity_detail'),
+    path('classroom/<int:classroom_pk>/<int:pk>', ActivityDetailAPI.as_view(), name='activity_detail'),
     path('classroom/<int:classroom_pk>/activity/<int:pk>/submit/', SubmitView.as_view(), name='submit'),
     path('classroom/<int:classroom_pk>/activity/<int:activity_pk>/submitted/<int:pk>',SubmittedActivityScoreDetailView.as_view(), name='submission_detail'),
-    path('submission/<int:pk>/unsubmit/', UnsubmitView.as_view(), name='unsubmit'),
+    path('submission/<int:pk>/unsubmit/', UnsubmitViewAPI.as_view(), name='unsubmit'),
     #!SECTION ClassRoom
     path('classroom/create/', ClassroomCreate.as_view(),name="create_classroom"),
     path('classroom/delete/', ClassroomDelete.as_view(), name='delete_classroom'),

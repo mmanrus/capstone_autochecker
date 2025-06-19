@@ -6,7 +6,7 @@ import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 import ClassroomActivities from './pages/ClassroomActivities'
 import ProtectedRoute from "./components/ProtectedRoute"
-
+import ActivityDetail from './pages/ActivityDetail'
 
 function Logout(){
      localStorage.clear() // Clear Existing token
@@ -37,7 +37,9 @@ function App() {
                               </ProtectedRoute>
                          }
                     />     
-                    <Route path = '/classroom/:id/:id'
+                    {// hello how to id/id}
+                    }
+                    <Route path = '/classroom/:classroom_id/:id'
                          element={
                               <ProtectedRoute>
                                    <ActivityDetail />
@@ -52,6 +54,7 @@ function App() {
                     />
                     <Route path='*' element= { <NotFound />} 
                     />
+                    
                </Routes>
           </BrowserRouter>
      </>

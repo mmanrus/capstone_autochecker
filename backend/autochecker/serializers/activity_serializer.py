@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from autochecker.models.activity_model import Activity
-
+from django.contrib import messages
 class ActivitySerializer(serializers.ModelSerializer):
      class Meta:
           model = Activity
@@ -10,3 +10,9 @@ class ActivitySerializer(serializers.ModelSerializer):
                "students_assigned": {'read_only': True}
                }
 
+     def create(self, validated_data):
+          user = self.context['request'].user
+          if user.role != 'student':
+               serializers.ValidationError(self.request, 'Activity Creation Failed you are not the FATHER XD')
+          return Activity.objects.create(**validated_data)
+     
