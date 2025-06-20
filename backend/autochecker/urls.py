@@ -12,7 +12,7 @@ from autochecker.views.submitted_activity import SubmittedActivityScoreDetailVie
 from autochecker.views.unsubmit import UnsubmitViewAPI
 
 urlpatterns = [
-    path("logout/", auto_logout, name="auto_logout"),
+    #path("logout/", auto_logout, name="auto_logout"),
     #!SECTION Activity
     path('classroom/<int:classroom_pk>/makeactivity/', CreateActivityViewAPI.as_view(), name="makeactivity"),
     path('classroom/<int:classroom_pk>/<int:pk>', ActivityDetailAPI.as_view(), name='activity_detail'),
@@ -21,7 +21,7 @@ urlpatterns = [
     path('submission/<int:pk>/unsubmit/', UnsubmitViewAPI.as_view(), name='unsubmit'),
     #!SECTION ClassRoom
     path('classroom/create/', ClassroomCreateViewAPI.as_view(),name="create_classroom"),
-    path('classroom/delete/', ClassroomDeleteViewAPI.as_view(), name='delete_classroom'),
+    path('classroom/delete/<int:pk>/', ClassroomDeleteViewAPI.as_view(), name='delete_classroom'),
     path('classroom/join/', JoinClassroomView.as_view(), name="join_classroom"),
     path('', ClassroomListViewAPI.as_view(), name='home'),
     path('classroom/<int:pk>/', ClassroomActivitiesAPI.as_view(), name='classroom_detail')

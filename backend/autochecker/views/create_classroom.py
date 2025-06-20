@@ -7,9 +7,12 @@ from django.views.generic import CreateView
 
 
 # Rest
-from rest_framework import generics
+from rest_framework import generics, status
 from autochecker.serializers.classroom_serializer import ClassroomSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from autochecker.permissions.professor import IsProfessor
 class ClassroomCreateView(LoginRequiredMixin, CreateView):
     template_name = 'main/create_classroom.html'
     form_class = CreateClassroomForm
@@ -37,20 +40,39 @@ class ClassroomCreateView(LoginRequiredMixin, CreateView):
     
 class ClassroomCreateViewAPI(generics.CreateAPIView):
     serializer_class = ClassroomSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsProfessor]
 
 
     def perform_create(self, serializer):
         user = self.request.user
-        if user.role != 'professor':
-            raise PermissionError("Only professors can create classrooms.")
         serializer.save(teacher_assigned=user)
 
     
 class ClassroomDeleteViewAPI(generics.DestroyAPIView):
     serializer_class = ClassroomSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsProfessor]
     
     def get_queryset(self):
         return Classroom.objects.filter(teacher_assigned=self.request.user)
-  
+    
+    def delete(self, request, pk):
+        try:
+            user = self.request.user
+            print(user.role)
+            if user.role == 'student':
+                return Response({
+                    'detail': 'Students are fobidden to delete classroom'
+                    },status=status.HTTP_403_FORBIDDEN)
+            
+            classroom = Classroom.objects.get(pk=pk)
+            if classroom.teacher_assigned != user:
+                return Response({
+                    'detail': 'Unable to delete: You are not the owner of the classroom.'
+                    },status=status.HTTP_403_FORBIDDEN)
+            
+            classroom.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Classroom.DoesNotExist:
+            return Response({
+                'detail': 'Classroom not found'
+            }, status=status.HTTP_404_NOT_FOUND)
