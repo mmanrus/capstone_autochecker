@@ -10,8 +10,10 @@ from autochecker.views.join_classroom import JoinClassroomView
 from autochecker.views.submit_view import SubmitViewAPI
 from autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
 from autochecker.views.unsubmit import UnsubmitViewAPI
-
+from autochecker.views.get_user import getUserAPIView
 urlpatterns = [
+    #Get user
+    path('user/',getUserAPIView.as_view(),name='get_user'),
     #path("logout/", auto_logout, name="auto_logout"),
     #!SECTION Activity
     path('classroom/<int:classroom_pk>/makeactivity/', CreateActivityViewAPI.as_view(), name="makeactivity"),
