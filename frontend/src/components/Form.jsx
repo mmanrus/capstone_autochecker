@@ -52,6 +52,7 @@ function Form({route, method}) {
                     <button className='form-button' type="submit">
                          {name}
                     </button>
+                    {loading ? <p>Loading...</p>: ''}
                </form>
           </>
      )

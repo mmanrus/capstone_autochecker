@@ -86,13 +86,11 @@ class ActivityDetailAPI(generics.RetrieveAPIView):
                 'is_submitted': submission is not None,
                 'submission': SubmissionSerializer(submission).data if submission else None  # Include full submission object
             })
-        
+        # Serialize
         own_submission = Submission.objects.filter(activity=activity, student=user).first()
         serialized_submission = SubmissionSerializer(own_submission).data if own_submission else None
-
-        # Serialize
         serialized_activity = self.get_serializer(activity).data
-        serialized_submission = SubmissionSerializer(submission).data
+
         return Response({
             'activity': serialized_activity,
             'submission': serialized_submission,

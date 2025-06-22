@@ -7,12 +7,11 @@ class ActivitySerializer(serializers.ModelSerializer):
           fields = '__all__'
           extra_kwargs = {
                "teacher_assigned": {'read_only': True}, 
-               "students_assigned": {'read_only': True}
+               "students_assigned": {'read_only': True},
+               'isClosed': {'read_only': True}
                }
 
      def create(self, validated_data):
           user = self.context['request'].user
-          if user.role != 'student':
-               serializers.ValidationError('Activity Creation Failed you are not the FATHER XD')
           return Activity.objects.create(**validated_data)
      

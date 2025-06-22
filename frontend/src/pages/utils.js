@@ -8,4 +8,6 @@ function formattedDate(ISOdate) {
         }).format(date);
      return formatted
 }
+
+
 export default formattedDate

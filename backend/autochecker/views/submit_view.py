@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, render
 
 
+
+
 class SubmitView(LoginRequiredMixin, CreateView):
     model = Submission
     form_class = SubmitForm
@@ -56,3 +58,31 @@ class SubmitView(LoginRequiredMixin, CreateView):
         return reverse('activity_detail', kwargs={'classroom_pk': self.object.activity.classroom.pk,'pk': self.object.activity.pk})
     
 #!SECTION Assignment!
+
+from rest_framework.response import Response
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from autochecker.permissions.student import IsStudent
+from autochecker.serializers.submission_serializer import SubmissionSerializer
+class SubmitViewAPI(generics.CreateAPIView):
+    serializer_class = SubmissionSerializer
+    permission_classes = [IsStudent, IsAuthenticated]
+    def perform_create(self, serializer, *args, **kwargs):
+        activity = get_object_or_404(Activity, pk=self.kwargs['pk'])
+        student = self.request.user
+        now = datetime.now()
+        manila = pytz.timezone('Asia/Manila')
+        now = manila.localize(now)
+        if now > activity.time_limit:
+            return Response({
+                'detail': 'Submission Failed: The tests is close',
+            },status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        submitted = Submission.objects.filter(student=student, activity=activity).first()
+        if submitted:
+            return Response({
+                'detail': 'Submission Failed: You already submitted the test.',
+            },status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer.save(student=student, is_submitted=True)

@@ -2,7 +2,7 @@ import {useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import api from '../api.js'
 import formattedDate from './utils.js'
-
+import SubmitFormComponent from '../components/SubmitForm'
 
 function ActivityDetail() {
      const [ details, setDetails ] = useState('')
@@ -30,7 +30,9 @@ function ActivityDetail() {
                <article>{details.activity.description}</article>
                <p>{details.activity.instructions}</p>
                <p>{formattedDate(details.activity.time_limit)}</p>
+               <SubmitFormComponent classroomId={classroom_id} activityId={id}/>
           </>
+          // add form for submission
      ): ''}
      </>
      )

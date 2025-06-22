@@ -7,7 +7,7 @@ from autochecker.views.classroom_list import ClassroomListViewAPI
 from autochecker.views.create_activity import CreateActivityViewAPI
 from autochecker.views.create_classroom import ClassroomDeleteViewAPI, ClassroomCreateViewAPI
 from autochecker.views.join_classroom import JoinClassroomView
-from autochecker.views.submit_view import SubmitView
+from autochecker.views.submit_view import SubmitViewAPI
 from autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
 from autochecker.views.unsubmit import UnsubmitViewAPI
 
@@ -16,7 +16,7 @@ urlpatterns = [
     #!SECTION Activity
     path('classroom/<int:classroom_pk>/makeactivity/', CreateActivityViewAPI.as_view(), name="makeactivity"),
     path('classroom/<int:classroom_pk>/<int:pk>', ActivityDetailAPI.as_view(), name='activity_detail'),
-    path('classroom/<int:classroom_pk>/activity/<int:pk>/submit/', SubmitView.as_view(), name='submit'),
+    path('classroom/<int:classroom_pk>/activity/<int:pk>/submit/', SubmitViewAPI.as_view(), name='submit'),
     path('classroom/<int:classroom_pk>/activity/<int:activity_pk>/submitted/<int:pk>',SubmittedActivityScoreDetailView.as_view(), name='submission_detail'),
     path('submission/<int:pk>/unsubmit/', UnsubmitViewAPI.as_view(), name='unsubmit'),
     #!SECTION ClassRoom

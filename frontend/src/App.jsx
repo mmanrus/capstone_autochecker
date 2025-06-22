@@ -7,7 +7,7 @@ import NotFound from "./pages/NotFound"
 import ClassroomActivities from './pages/ClassroomActivities'
 import ProtectedRoute from "./components/ProtectedRoute"
 import ActivityDetail from './pages/ActivityDetail'
-
+import CreateActivityFormComponent from './components/CreateActivityForm'
 function Logout(){
      localStorage.clear() // Clear Existing token
      return <Navigate to='/login' />
@@ -37,15 +37,21 @@ function App() {
                               </ProtectedRoute>
                          }
                     />     
-                    {// hello how to id/id}
-                    }
+
                     <Route path = '/classroom/:classroom_id/:id'
                          element={
                               <ProtectedRoute>
                                    <ActivityDetail />
                               </ProtectedRoute>
                          }
-                    />                  
+                    />        
+                    <Route path = '/classroom/:id/makeactivity'
+                         element={
+                              <ProtectedRoute>
+                                   <CreateActivityFormComponent />
+                              </ProtectedRoute>
+                         }
+                    />               
                     <Route path='/login' element= { <Login />}
                     />
                     <Route path='/logout' element= { <Logout />}

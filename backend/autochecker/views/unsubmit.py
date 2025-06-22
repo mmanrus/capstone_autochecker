@@ -25,21 +25,23 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-class UnsubmitViewAPI(generics.DestroyAPIView):
+class UnsubmitViewAPI(generics.UpdateAPIView):
     serializer_class = SubmissionSerializer
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         return Submission.objects.filter(student=self.request.user)
     
-    def destroy(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         submission_id = self.kwargs.get('pk')
         user = self.request.user
         submission = get_object_or_404(Submission, pk=submission_id, student=user)
         
         if submission.submitted_file:
             submission.submitted_file.delete()
-        
+            submission.submitted_file = None
+        submission.is_submitted = False
+        submission.save()
         self.perform_destroy(submission)
         return Response(status=204)
         

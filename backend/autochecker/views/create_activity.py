@@ -41,4 +41,29 @@ class CreateActivityViewAPI(generics.CreateAPIView):
     
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(teacher_assigned=user)
+        classroom_id = self.kwargs.get('classroom_pk')
+        classroom = get_object_or_404(Classroom, pk=classroom_id)
+        serializer.save(teacher_assigned=user, classroom=classroom)
+        
+class DeleteActivityViewAPI(generics.DestroyAPIView):
+    serializer_class = ActivitySerializer
+    permission_classes = [IsAuthenticated, IsProfessor]
+    
+    def get_queryset(self):
+        return Activity.objects.filter(teacher_assigned=self.request.user)
+    
+    def delete(self, request, pk):
+        try:
+            user = self.request.user
+            classroom = Activity.objects.get(pk=pk)
+            if classroom.teacher_assigned != user:
+                return Response({
+                    'detail': 'Unable to delete: You are not the owner of the Assigned teacher.'
+                    },status=status.HTTP_403_FORBIDDEN)
+            
+            classroom.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Classroom.DoesNotExist:
+            return Response({
+                'detail': 'Classroom not found'
+            }, status=status.HTTP_404_NOT_FOUND)
