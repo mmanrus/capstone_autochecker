@@ -1,6 +1,6 @@
 // Interceptor: Axios inceptor to get access token
 import axios from 'axios'
-import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants.js'
+import { ACCESS_TOKEN } from './constants.js'
 
 const api = axios.create({
      baseURL: import.meta.env.VITE_API_URL

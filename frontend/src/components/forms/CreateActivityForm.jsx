@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import api from '../api.js'
+import api from '../../api.js'
 import { useParams, Link } from 'react-router-dom'
 
 function CreateActivityFormComponent(){

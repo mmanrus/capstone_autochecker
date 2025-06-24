@@ -2,7 +2,7 @@ import {useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import api from '../api.js'
 import formattedDate from './utils.js'
-import SubmitFormComponent from '../components/SubmitForm'
+import SubmitFormComponent from '../components/forms/SubmitForm'
 
 function ActivityDetail() {
      const [ details, setDetails ] = useState('')

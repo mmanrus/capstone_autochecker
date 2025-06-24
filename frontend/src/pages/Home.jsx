@@ -6,7 +6,6 @@ function Home(){
       useEffect(() => {
             const token = localStorage.getItem('access')
             if (token) {
-                  console.log(token)
                   get_classroom()
             }
       }, [])

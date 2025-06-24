@@ -1,13 +1,16 @@
-import { useState } from 'react'
-import api from '../api'
+import { useState, useContext } from 'react'
+import api from '../../api.js'
 import { useNavigate } from "react-router-dom"
-import {ACCESS_TOKEN, REFRESH_TOKEN} from '../constants.js'
+import {ACCESS_TOKEN, REFRESH_TOKEN} from '../../constants.js'
+import { IsAuthenticatedContext } from '../AuthContext'
+
 
 
 function Form({route, method}) {
      const [username, setUsername ] = useState('')
      const [password, setPassword ] = useState('')
      const [loading, setLoading] = useState(false)
+     const { auth } = useContext(IsAuthenticatedContext)
 
      const navigate = useNavigate()
      const name = method === 'login' ? "Login" : "Register"
@@ -21,12 +24,19 @@ function Form({route, method}) {
                if (method === 'login') {
                     localStorage.setItem(ACCESS_TOKEN, res.data.access)
                     localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
+                    await auth() 
                     navigate('/')
                } else {
                     navigate('/login')
                }
-          } catch(error) {
-               alert(error)
+          } catch (error) {
+               if (error.response) {
+                   alert(error.response.data.detail || 'Login failed')
+                   console.error('Backend Error:', error.response.data)
+               } else {
+                   alert('Network error')
+                   console.error(error)
+               }
           } finally {
                setLoading(false)
           }
