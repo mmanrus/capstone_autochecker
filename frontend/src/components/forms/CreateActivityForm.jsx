@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import api from '../../api.js'
 import { useParams, Link } from 'react-router-dom'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 function CreateActivityFormComponent(){
      const {id} = useParams()
@@ -44,7 +47,7 @@ function CreateActivityFormComponent(){
                )
                const data = res.data
                setMessage(data)
-               
+               console.log([...formData.entries()]);
           } catch(err) {
                console.log(err)
           } finally {
@@ -60,13 +63,8 @@ function CreateActivityFormComponent(){
                     placeholder='title'
                     type='text'
                     />
-
-               <textarea className='form-input' 
-                    onChange={(event)=>setDescription(event.target.value)}
-                    value={description}
-                    placeholder='Description'
-                    />
-
+               <ReactQuill theme="snow" value={description} onChange={(event)=>setDescription(event.target.value)} />
+                    
                <input className='form-input' 
                     type='file' 
                     onChange={handleFileChange} 
@@ -92,7 +90,7 @@ function CreateActivityFormComponent(){
 
                <button type='submit' disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
                {message && <p>{message}</p>}
-               {loading ? 'Loading': loading}
+               {loading ? <progress value={null} />: loading}
           </form>
           </>
      )

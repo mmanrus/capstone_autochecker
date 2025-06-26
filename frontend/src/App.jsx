@@ -12,7 +12,7 @@ import HeaderComponent from './components/semantics/Header'
 import Logout from './lib/logout'
 import {AuthenticationProvider} from './components/AuthContext'
 import {UserContextProvider} from './lib/UserContext'
-
+import TestSuiteForm from './components/forms/TestSuiteForm'
 
 function RegisterAndLogout(){
      localStorage.clear() // Clear the Access Token Before Register
@@ -54,7 +54,14 @@ function App() {
                                                   <CreateActivityFormComponent />
                                              </ProtectedRoute>
                                         }
-                                   />               
+                                   />
+                                   <Route path = '/create-test-suite'
+                                        element={
+                                             <ProtectedRoute>
+                                                  <TestSuiteForm />
+                                             </ProtectedRoute>
+                                        }
+                                   />                 
                                    <Route path='/login' element= { <Login />}
                                    />
                                    <Route path='/logout' element= { <Logout />}
