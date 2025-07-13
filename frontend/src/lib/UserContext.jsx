@@ -13,7 +13,7 @@ export function UserContextProvider({children}) {
           } else {
                setUser(null)
           }
-     })
+     }, [isAuthorized])
 
      const get_user = async()  => {
           try {

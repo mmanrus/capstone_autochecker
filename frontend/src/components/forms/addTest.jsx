@@ -1,8 +1,5 @@
 
-import { useState } from 'react'
-
-
-function TestCase({ input, output, helper, index, onChange }) {
+function TestCase({ input, output, helper, index, onChange, onDelete }) {
 
      return (
           <>
@@ -28,6 +25,7 @@ function TestCase({ input, output, helper, index, onChange }) {
                          onChange={(e) => onChange(index, 'helper', e.target.value)}
                          placeholder='78'
                     />
+                    <button onClick={()=> onDelete(index)}>Remove</button>
                </div>
           </>
      )

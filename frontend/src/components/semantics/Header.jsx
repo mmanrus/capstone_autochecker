@@ -1,6 +1,6 @@
 import { useContext, } from 'react'
 import { UserContext} from '../../lib/UserContext'
-import '../../styles/header.css'
+
 import { LuBell } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom'
 import {IsAuthenticatedContext} from '../AuthContext'
@@ -21,11 +21,11 @@ function HeaderComponent(){
      
      return (
           <>
-          <header className="header">
-               <h1 className="logo"><a href="#">Flexbox</a></h1>
+          <header className="header bg-red-500 text-white flex justify-between items-center px-4 py-2">
+               <h1 className="logo text-red font-medium"><a href="#">Flexbox</a></h1>
                <ul className="main-nav">
 
-                    <li><a href="#">Home</a></li>
+                    <li><a href="#" className='text-red font-medium'>Home</a></li>
                     <li><a href="#">About</a></li>
                     { user && (
                          <>

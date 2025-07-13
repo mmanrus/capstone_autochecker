@@ -10,10 +10,6 @@ export const IsAuthenticatedContext = createContext()
 export function AuthenticationProvider({children}) {
      const [isAuthorized, setIsAuthorized] = useState(null)
 
-     useEffect(()=> {
-          auth().catch(()=> setIsAuthorized(false))
-     }, [])
-
      const refreshToken = async ()=>{
           // Get RefreshToken
           const refreshToken = localStorage.getItem(REFRESH_TOKEN)
@@ -31,6 +27,7 @@ export function AuthenticationProvider({children}) {
                setIsAuthorized(false)
           }
      }
+
      const auth = async ()=>{
           const token = localStorage.getItem(ACCESS_TOKEN)
           if (!token){
@@ -48,7 +45,9 @@ export function AuthenticationProvider({children}) {
                setIsAuthorized(true)
           }
      }
-
+     useEffect(()=> {
+          auth().catch(()=> setIsAuthorized(false))
+     }, [])
      return (
           <IsAuthenticatedContext.Provider value={{ isAuthorized, setIsAuthorized, auth }}>
                {children}

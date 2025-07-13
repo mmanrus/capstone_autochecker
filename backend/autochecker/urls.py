@@ -8,6 +8,7 @@ from autochecker.views.create_activity import CreateActivityViewAPI
 from autochecker.views.create_classroom import ClassroomDeleteViewAPI, ClassroomCreateViewAPI
 from autochecker.views.join_classroom import JoinClassroomView
 from autochecker.views.submit_view import SubmitViewAPI
+from autochecker.views.testSuite.create_test_suite import CreateTestSuiteViewAPI
 from autochecker.views.submitted_activity import SubmittedActivityScoreDetailView
 from autochecker.views.unsubmit import UnsubmitViewAPI
 from autochecker.views.get_user import getUserAPIView
@@ -16,6 +17,7 @@ urlpatterns = [
     path('user/',getUserAPIView.as_view(),name='get_user'),
     #path("logout/", auto_logout, name="auto_logout"),
     #!SECTION Activity
+    path('create-test-suite/', CreateTestSuiteViewAPI.as_view(), name='create_test_suite'),
     path('classroom/<int:classroom_pk>/makeactivity/', CreateActivityViewAPI.as_view(), name="makeactivity"),
     path('classroom/<int:classroom_pk>/<int:pk>', ActivityDetailAPI.as_view(), name='activity_detail'),
     path('classroom/<int:classroom_pk>/activity/<int:pk>/submit/', SubmitViewAPI.as_view(), name='submit'),

@@ -12,8 +12,10 @@ import HeaderComponent from './components/semantics/Header'
 import Logout from './lib/logout'
 import {AuthenticationProvider} from './components/AuthContext'
 import {UserContextProvider} from './lib/UserContext'
+import IsProfessor from './lib/is_professor'
 import TestSuiteForm from './components/forms/TestSuiteForm'
-
+import './index.css'
+import './app.css'
 function RegisterAndLogout(){
      localStorage.clear() // Clear the Access Token Before Register
      return <Register />
@@ -51,17 +53,32 @@ function App() {
                                    <Route path = '/classroom/:id/makeactivity'
                                         element={
                                              <ProtectedRoute>
-                                                  <CreateActivityFormComponent />
+                                                  <IsProfessor>
+                                                       <CreateActivityFormComponent />
+                                                  </IsProfessor>   
                                              </ProtectedRoute>
                                         }
                                    />
                                    <Route path = '/create-test-suite'
                                         element={
                                              <ProtectedRoute>
-                                                  <TestSuiteForm />
+                                                  <IsProfessor>
+                                                       <TestSuiteForm />
+                                                  </IsProfessor>   
                                              </ProtectedRoute>
                                         }
-                                   />                 
+                                   />
+                                   <Route path = '/classroom/:id/activity/:submitId'
+                                        element={
+                                             <ProtectedRoute>
+                                                  <IsProfessor>
+                                                       <TestSuiteForm />
+                                                  </IsProfessor>   
+                                             </ProtectedRoute>
+                                        }
+                                   />       
+                                   {/* Submit for students */}        
+                                   {/* Join Classrrom for Students */}     
                                    <Route path='/login' element= { <Login />}
                                    />
                                    <Route path='/logout' element= { <Logout />}
