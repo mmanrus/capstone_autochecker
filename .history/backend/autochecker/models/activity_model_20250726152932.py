@@ -8,10 +8,9 @@ from .utils import default_time_closed, professor_filter
 
 
 class Activity(models.Model):
-     ACTIVITY_TYPE = (
-          ('practice', 'practice'),
-
-          ('activity', 'activity'),
+     ROLE = (
+          ('professor', 'professor'),
+          ('student', 'student')
      )
      title = models.CharField(max_length=255)
      teacher_assigned = models.ForeignKey(
@@ -20,7 +19,6 @@ class Activity(models.Model):
           limit_choices_to=professor_filter, 
           blank=True
      )
-     activity_type = models.CharField(choices=ACTIVITY_TYPE, default='activity', max_length=20)
      description = models.TextField()
      instructions = models.FileField(upload_to='instructions/', null=False)
      check50_slug = models.CharField(max_length=255)

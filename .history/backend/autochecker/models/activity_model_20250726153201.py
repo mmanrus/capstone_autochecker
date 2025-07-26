@@ -20,7 +20,7 @@ class Activity(models.Model):
           limit_choices_to=professor_filter, 
           blank=True
      )
-     activity_type = models.CharField(choices=ACTIVITY_TYPE, default='activity', max_length=20)
+     activity_type = models.CharField(choices=ACTIVITY_TYPE, default='activity')
      description = models.TextField()
      instructions = models.FileField(upload_to='instructions/', null=False)
      check50_slug = models.CharField(max_length=255)
