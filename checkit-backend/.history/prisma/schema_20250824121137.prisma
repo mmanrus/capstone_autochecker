@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  //provider = "postgresql"
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  student
+  professor
+}
+
+model User {
+  id               Int          @id @default(autoincrement())
+  fullName         String
+  email            String  @unique
+  role             Role
+  password         String // bcrypt hash only, never plain text
+  createdAt        DateTime     @default(now())
+  profilePhoto     String?
+  //Professor Relation
+  subjectsAssigned Subject[]    @relation("UseSubjects")
+  activityCreated  Activity[]   @relation("activityCreator")
+  TestSuite        TestSuite[]
+  //Student Relation
+  enrolledSubjects Subject[]    @relation("StudentSubjects")
+  // Activity creator can own many Activities
+  submission       Submission[]
+}
+
+model Subject {
+  id          Int        @id @default(autoincrement())
+  name   String
+  code   String     @unique
+  createdAt   DateTime   @default(now())
+  // one professor per subject
+  schedule    String
+  professorId Int
+  professor   User       @relation("UseSubjects", fields: [professorId], references: [id])
+  // many students per subject
+  students    User[]     @relation("StudentSubjects")
+  activity    Activity[]
+}
+
+enum ActivityType {
+  practice
+  activity
+  exam
+}
+
+model Activity {
+  id          Int      @id @default(autoincrement())
+  title       String
+  check50Slug String
+  createdAt   DateTime @default(now())
+  timeOpen    DateTime
+  timeClose   DateTime
+  isClosed    Boolean  @default(false)
+  // subject relation
+  subjectId   Int
+  subject     Subject  @relation(fields: [subjectId], references: [id])
+
+  // professor relation
+  professorId Int
+  professor   User         @relation("activityCreator", fields: [professorId], references: [id])
+  submissions Submission[]
+}
+
+enum SubmissionStatus {
+  pending
+  passed
+  failed
+}
+
+model Submission {
+  id                Int              @id @default(autoincrement())
+  status            SubmissionStatus
+  grade             Float
+  feedback          String
+  professorFeedback String
+  isSubmitted       Boolean          @default(false)
+  createdAt         DateTime         @default(now())
+  user              User             @relation(fields: [userId], references: [id])
+  userId            Int
+  activityId        Int
+  Activity          Activity         @relation(fields: [activityId], references: [id])
+
+  // 🔑 enforce "only one submission per student per activity"
+  @@unique([userId, activityId])
+}
+
+enum TestSuiteType {
+  c
+  // flask // server
+}
+
+model TestSuite {
+  id          Int           @id @default(autoincrement())
+  title       String        @unique
+  type        TestSuiteType @default(c)
+  filename    String
+  description String
+  createdAt   DateTime      @default(now())
+  testCases   TestCase[] // one Test Suite to many Test Cases 
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+}
+
+model TestCase {
+  id        Int      @id @default(autoincrement())
+  input     String
+  output    String
+  helper    String?
+  createdAt DateTime @default(now())
+
+  testSuiteId Int
+  testSuite   TestSuite @relation(fields: [testSuiteId], references: [id])
+}
