@@ -1,0 +1,52 @@
+import * as subjectControllers from "@/controllers/subject.controller";
+import { authenticateToken, authorizeRole } from "@/middleware/auth.middleware";
+import { Router } from "express";
+
+const router = Router();
+
+router.post(
+  "/",
+  authenticateToken,
+  authorizeRole("professor"),
+  subjectControllers.createSubject
+);
+router.post(
+  "/",
+  authenticateToken,
+  authorizeRole("student"),
+  subjectControllers.createSubject
+);
+router.put(
+  "/:id",
+  authenticateToken,
+  authorizeRole("professor"),
+  subjectControllers.updateSubject
+);
+
+router.delete(
+  "/:id",
+  authenticateToken,
+  authorizeRole("proffessor"),
+  subjectControllers.deleteSubject
+);
+
+router.get(
+  "/assigned",
+  authenticateToken,
+  authorizeRole("proffessor"),
+  subjectControllers.getAssignedSubjects
+);
+
+router.get(
+  "/enrolled",
+  authenticateToken,
+  authorizeRole("student"),
+  subjectControllers.getEnrolledSubjects
+);
+
+router.get(
+  "/subjects/:id",
+  authenticateToken,
+  subjectControllers.getSubjectById
+);
+export default router;

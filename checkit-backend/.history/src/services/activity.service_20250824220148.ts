@@ -1,0 +1,180 @@
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export const createActivity = async (
+  activityData: any,
+  professorId: number,
+  subjectId?: number,
+  timeData?: any
+) => {
+  if (!subjectId) {
+    const newActivity = await prisma.activity.create({
+      data: {
+        ...activityData,
+        professor: {
+          connect: {
+            id: professorId,
+          },
+        },
+      },
+    });
+    return newActivity;
+  } else {
+    const newActivity = await prisma.activity.create({
+      data: {
+        ...activityData,
+        professor: {
+          connect: {
+            id: professorId,
+          },
+        },
+      },
+    });
+    const exists = await prisma.subjectActivity.findUnique({
+      where: {
+        subjectId_activityId: {
+          subjectId,
+          activityId: newActivity.id,
+        },
+      },
+    });
+    if (exists) {
+      throw new Error("This activity is already assigned to the subject.");
+    }
+    if (timeData.timeOpen >= timeData.timeClose) {
+      throw new Error("`timeOpen` must be earlier than `timeClose`");
+    }
+    await prisma.subjectActivity.create({
+      data: {
+        subjectId: subjectId,
+        activityId: newActivity.id,
+        timeOpen: timeData.timeOpen,
+        timeClose: timeData.timeClose,
+      },
+    });
+    return { newActivity, ...timeData };
+  }
+};
+
+export const updateActivity = async (
+  activityData: any,
+
+  activityId: number,
+  timeData?: any,
+  subjectId?: number
+) => {
+  // Update the activity
+  const updatedActivity = await prisma.activity.update({
+    where: { id: activityId },
+    data: { ...activityData },
+  });
+
+  // If timeData and subjectId are provided, update the join table
+  if (timeData && subjectId) {
+    if (timeData.timeOpen >= timeData.timeClose) {
+      throw new Error("`timeOpen` must be earlier than `timeClose`");
+    }
+
+    await prisma.subjectActivity.update({
+      where: {
+        subjectId_activityId: {
+          activityId,
+          subjectId,
+        },
+      },
+      data: { ...timeData },
+    });
+  }
+
+  // Return updated activity and timeData if applicable
+  return subjectId && timeData
+    ? { updatedActivity, ...timeData }
+    : updatedActivity;
+};
+
+export const deleteActivity = async (id: number) => {
+  return await prisma.subject.delete({
+    where: { id },
+  });
+};
+export const getActivityById = async (
+  subjectId: number,
+  activityId: number
+) => {
+  const activity = await prisma.subjectActivity.findUnique({
+    where: {
+      subjectId_activityId: {
+        subjectId,
+        activityId,
+      },
+    },
+    select: {
+      activity: {
+        select: {
+          id: true,
+          title: true,
+          check50Slug: true,
+          createdAt: true,
+          // you can also include instructions if you have a field for it
+        },
+      },
+      timeOpen: true,
+      timeClose: true,
+      isClosed: true,
+    },
+  });
+
+  return activity;
+};
+export const getSubjectActivities = async (subjectId: number) => {
+  const activities = await prisma.subjectActivity.findMany({
+    where: {
+      subjectId,
+    },
+    select: {
+      activity: {
+        select: { id: true, title: true },
+      },
+      isClosed: true,
+      timeOpen: true,
+      timeClose: true,
+    },
+  });
+
+  return activities;
+};
+
+export const getStudentAllSubjectActivities = async (userId: number) => {
+  const subjects = await prisma.subject.findMany({
+    where: {
+      students: { some: { id: userId } },
+    },
+    select: { id: true, name: true },
+  });
+
+  const results = await Promise.all(
+    subjects.map(async (subject) => {
+      const activities = await getSubjectActivities(subject.id);
+      return { ...subject, activities };
+    })
+  );
+
+  return results;
+};
+
+export const getProfessorAllSubjectActivites = async (userId: number) => {
+  const subjects = await prisma.subject.findMany({
+    where: {
+      professorId: userId,
+    },
+  });
+
+  const results = await Promise.all(
+    subjects.map(async (subject) => {
+      const activities = await getSubjectActivities(subject.id);
+      return { ...subject, activities };
+    })
+  );
+  return results;
+};
