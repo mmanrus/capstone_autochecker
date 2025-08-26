@@ -6,6 +6,7 @@ import userRouter from "@/routes/user.route";
 import subjectRouter from "@/routes/subject.route";
 import activityRouter from "@/routes/activity.route";
 import submissionRouter from "@/routes/submission.route"
+import testSuiteRouter from "@/routes/testSuite.route"
 import cors from "cors";
 startCronJobs();
 const app = express();
@@ -19,6 +20,7 @@ app.use("/api/users/", userRouter);
 app.use("/api/subjects/", subjectRouter);
 app.use("/api/activities/", activityRouter);
 app.use("/api/submissions/", submissionRouter);
+app.use("/api/test/", testSuiteRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
@@ -76,6 +78,19 @@ app.listen(PORT, () => {
         .toUpperCase();
       console.log(
         `- ${methods} http://localhost:${PORT}${basePath}submissions${route.path}`
+      );
+    }
+  });
+  console.log("<<=========== TestSuite Router =========>>");
+  testSuiteRouter.stack.forEach((layer) => {
+    // Check if the layer is a router and has a route
+    if (layer.route) {
+      const route = layer.route;
+      const methods = Object.keys((route as any).methods)
+        .join(", ")
+        .toUpperCase();
+      console.log(
+        `- ${methods} http://localhost:${PORT}${basePath}test${route.path}`
       );
     }
   });

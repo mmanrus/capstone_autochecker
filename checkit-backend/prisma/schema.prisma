@@ -41,7 +41,7 @@ model User {
 model Subject {
   id          Int               @id @default(autoincrement())
   name        String
-  code        String?            @unique
+  code        String?           @unique
   createdAt   DateTime          @default(now())
   // one professor per subject
   schedule    String
@@ -128,24 +128,27 @@ enum TestSuiteType {
 }
 
 model TestSuite {
-  id          Int           @id @default(autoincrement())
-  title       String        @unique
-  type        TestSuiteType @default(c)
-  filename    String
-  description String
-  createdAt   DateTime      @default(now())
-  testCases   TestCase[] // one Test Suite to many Test Cases 
+  id          Int            @id @default(autoincrement())
+  title       String         @unique
+  type        TestSuiteType? @default(c)
+  filename    String         @unique
+  check50Slug String         @unique
+  description String?
+  createdAt   DateTime       @default(now())
+  testCases   TestCases[] // one Test Suite to many Test Cases 
   userId      Int
-  user        User          @relation(fields: [userId], references: [id])
+  user        User           @relation(fields: [userId], references: [id])
 }
 
-model TestCase {
-  id        Int      @id @default(autoincrement())
-  input     String
-  output    String
-  helper    String?
-  createdAt DateTime @default(now())
-
+model TestCases {
+  id          Int       @id @default(autoincrement())
+  input       Json
+  output      Json
+  description String?
+  helper      String?
+  reject      Boolean? @default(false)
+  createdAt   DateTime  @default(now())
+  order       Int
   testSuiteId Int
   testSuite   TestSuite @relation(fields: [testSuiteId], references: [id])
 }

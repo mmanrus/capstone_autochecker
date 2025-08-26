@@ -56,7 +56,7 @@ class CreateTestSuiteViewAPI(generics.CreateAPIView):
           
           # Write .cs50.yaml
           with open(os.path.join(base_path, '.cs50.yaml'), 'w') as f:
-               f.write(f"check50: 50")
+               f.write(f"check50: true")
           
           # Write __init__.py
           with open(os.path.join(base_path, '__init__.py'), 'w') as f:
